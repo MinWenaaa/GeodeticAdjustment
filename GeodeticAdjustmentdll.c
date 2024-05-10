@@ -110,8 +110,6 @@ void BesselInverseNative(double* result,double L1, double B1, double L2, double 
     return;
 }
 
-
-
 //高斯正算：由椭球面到平面
 void GuassForwardNative(double* result, double B, double L, int L_num, int mode, int earth){
     double L_center = (mode==0) ? 6 * L_num - 3 : 3 * L_num;
