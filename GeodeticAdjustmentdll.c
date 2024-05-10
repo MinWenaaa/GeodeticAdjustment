@@ -205,8 +205,8 @@ void GuassBackwardNative(double* result, double x, double y, int L_num, int mode
 //高斯邻带换算
 void GuassZoneConversionNative(double* result, double originx, double originy, int originZone, int targetZone, int mode, int earth){
     double Geodetic[2]={0,0};
-    GuassBackward(Geodetic,originx,originy,originZone,mode,earth);
-    GuassForward(result,Geodetic[0],Geodetic[1],targetZone,mode,earth);
+    GuassBackwardNative(Geodetic,originx,originy,originZone,mode,earth);
+    GuassForwardNative(result,Geodetic[0],Geodetic[1],targetZone,mode,earth);
     return;
 }
 
