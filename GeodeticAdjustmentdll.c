@@ -10,8 +10,10 @@ const double e[4]={0.0066934216229660,0.006694384999588,0.00669437999013,0.00669
 const double e1[4]={0.006738525414683,0.006739501819473,0.00673949674227,0.00673949677548};
 
 
+double result[3]={0,0,0};
+
 //白塞尔大地主题正算
-void BesselDirect(double* result, double L1, double B1, double A1, double S, int earth){
+void BesselDirectNative(double* result, double L1, double B1, double A1, double S, int earth){
     //角度改弧度
     L1/=(180/pi); B1/=(180/pi); A1/=(180/pi);
 
@@ -60,7 +62,7 @@ void BesselDirect(double* result, double L1, double B1, double A1, double S, int
 }
 
 //白塞尔大地主题反算
-void BesselInverse(double* result,double L1, double B1, double L2, double B2, int earth){
+void BesselInverseNative(double* result,double L1, double B1, double L2, double B2, int earth){
     //角度改弧度
     L1/=(180/pi); B1/=(180/pi); L2/=(180/pi); B2/=(180/pi);
 
@@ -111,7 +113,7 @@ void BesselInverse(double* result,double L1, double B1, double L2, double B2, in
 
 
 //高斯正算：由椭球面到平面
-void GuassForward(double* result, double B, double L, int L_num, int mode, int earth){
+void GuassForwardNative(double* result, double B, double L, int L_num, int mode, int earth){
     double L_center = (mode==0) ? 6 * L_num - 3 : 3 * L_num;
  
     double l = (L - L_center) * 3600 / p0; //经差
@@ -153,7 +155,7 @@ void GuassForward(double* result, double B, double L, int L_num, int mode, int e
 }
 
 //高斯反算：平面到椭球面
-void GuassBackward(double* result, double x, double y, int L_num, int mode, int earth)
+void GuassBackwardNative(double* result, double x, double y, int L_num, int mode, int earth)
 {
     int L_center = (mode==0) ? 6 * L_num - 3 : 3 * L_num;    
  
@@ -201,9 +203,59 @@ void GuassBackward(double* result, double x, double y, int L_num, int mode, int 
 }
 
 //高斯邻带换算
-void GuassZoneConversion(double* result, double originx, double originy, int originZone, int targetZone, int mode, int earth){
+void GuassZoneConversionNative(double* result, double originx, double originy, int originZone, int targetZone, int mode, int earth){
     double Geodetic[2]={0,0};
-    GuassBackward(Geodetic,originx,originy,originZone,mode,earth);
-    GuassForward(result,Geodetic[0],Geodetic[1],targetZone,mode,earth);
+    GuassBackwardNative(Geodetic,originx,originy,originZone,mode,earth);
+    GuassForwardNative(result,Geodetic[0],Geodetic[1],targetZone,mode,earth);
     return;
+}
+
+
+double BDL2(double L1, double B1, double A1, double S, int earth){
+    BesselDirectNative(result, L1, B1, A1, S, earth);
+    return result[0];
+}
+double BDB2(double L1, double B1, double A1, double S, int earth){
+    BesselDirectNative(result, L1, B1, A1, S, earth);
+    return result[1];
+}
+double BDA2(double L1, double B1, double A1, double S, int earth){
+    BesselDirectNative(result, L1, B1, A1, S, earth);
+    return result[2];
+}
+double BIA1(double L1, double B1, double L2, double B2, int earth){
+    BesselInverseNative(result, L1, B1, L2, B2, earth);
+    return result[0];
+}
+double BIA2(double L1, double B1, double L2, double B2, int earth){
+    BesselInverseNative(result, L1, B1, L2, B2, earth);
+    return result[1];
+}
+double BIS(double L1, double B1, double L2, double B2, int earth){
+    BesselInverseNative(result, L1, B1, L2, B2, earth);
+    return result[2];
+}
+double GFx(double B, double L, int L_num, int mode, int earth){
+    GuassForwardNative(result, B, L, L_num, mode, earth);
+    return result[0];
+}
+double GFy(double B, double L, int L_num, int mode, int earth){
+    GuassForwardNative(result, B, L, L_num, mode, earth);
+    return result[1];
+}
+double GBB(double x, double y, int L_num, int mode, int earth){
+    GuassBackwardNative(result, x, y, L_num, mode, earth);
+    return result[0];
+}
+double GBL(double x, double y, int L_num, int mode, int earth){
+    GuassBackwardNative(result, x, y, L_num, mode, earth);
+    return result[1];
+}
+double GCx(double originx, double originy, int originZone, int targetZone, int mode, int earth){
+    GuassZoneConversionNative(result, originx, originy, originZone, targetZone, mode, earth);
+    return result[0];
+}
+double GCy(double originx, double originy, int originZone, int targetZone, int mode, int earth){
+    GuassZoneConversionNative(result, originx, originy, originZone, targetZone, mode, earth);
+    return result[1];
 }
