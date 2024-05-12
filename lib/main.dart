@@ -12,9 +12,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: "大地测量计算工具",
-      color: AppColors1.backgroundColor,
+      theme: ThemeData(
+          colorScheme:ColorScheme.fromSeed(seedColor: Colors.green)
+      ),
+      //color: AppColors1.backgroundColor,
       home:Scaffold(
         backgroundColor:AppColors1.backgroundColor,
         body: HomePage()

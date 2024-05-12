@@ -9,36 +9,83 @@ class AuthorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(style==0) {
-      return authorCard1();
-    }
-    return authorCard2();
+    return Stack(
+      children: [
+        Card(
+          elevation:10,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          clipBehavior:Clip.hardEdge,
+          child:const SizedBox(
+            height:double.infinity,
+            width:double.infinity,
+            child:
+            Image(
+                image: AssetImage('asset/card.png'),
+                fit:BoxFit.cover
+            ),
+          ),
+        ),
+        Center(
+          child:
+            style==0?authorCard1():authorCard2(),
+        ),
+      ],
+    );
   }
 
   Widget authorCard1(){
-    return const Card(
-      color:AppColors1.primaryColor,
-      child:Column(
-        children:[
-          Text("Author:"),
-          Text("MinWenaaa")
-        ]
-      )
+    return Column(
+        mainAxisAlignment:MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width:300, height:300,
+            child: user()
+        ),
+        const Text("MinWenaaa",style:AppText.aBig),
+        const Row(
+            mainAxisAlignment:MainAxisAlignment.center,
+          children:[
+            Icon(Icons.villa,color:AppColors1.textColor),
+            Text("中国地质大学（武汉）",style:AppText.standard)
+          ]
+        )
+      ],
     );
   }
 
   Widget authorCard2(){
-    return const Card(
-        color:AppColors1.primaryColor,
-        child:Column(
-            children:[
-              Text("Author:"),
-              Text("MinWenaaa")
-            ]
-        )
+    return Row(
+      mainAxisAlignment:MainAxisAlignment.center,
+      children: [
+        SizedBox(
+            width:220, height:220,
+            child: user()
+        ),
+        const SizedBox(width:40),
+        const Column(
+          mainAxisAlignment:MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("MinWenaaa",style:AppText.aBig),
+            Row(
+                mainAxisAlignment:MainAxisAlignment.center,
+                children:[
+                  Icon(Icons.villa,color:AppColors1.textColor),
+                  Text("中国地质大学（武汉）",style:AppText.standard)
+                ]
+            )
+          ],
+        ),
+        const SizedBox(width:60)
+      ],
     );
   }
 
+  Widget user(){
+    return const ClipOval(
+      child:Image(image: AssetImage('asset/user.jpg'),)
+    );
+  }
 }
 
 
@@ -51,54 +98,99 @@ class ToolCard extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (tool){
       case 0:
-        return style==0 ? tools1("Geodetic Datum",["Bessel"]) : tools2("Geodetic Datum",["Bessel"]);
+        return style==0 ? tools1(["Bessel"]) : tools2(["Bessel"]);
       case 1:
-        return style==0 ? tools1("Projection",["Guass"]) : tools2("Projection",["Guass"]);
+        return style==0 ? tools1(["Guass"]) : tools2(["Guass"]);
       default:
         return Container();
     }
   }
 
-  Widget tools1(String content,List<String> contents){
+  Widget tools1(List<String> contents){
     return Card(
-      color:AppColors1.primaryColor,
-      child:Row(
-        children:[
-          Flexible(
-            flex:1,
-            child:Text(content),
-          ),
-          Flexible(
-            flex:1,
-            child:Column(
-              children:[
-                Card(
-                  child:Text(content[0]),
+        elevation:10,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        color:AppColors1.primaryColor,
+        child:Row(
+          mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+          children:[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                    tool==0?"Geodetic":"Projection",
+                    style:const TextStyle(color:AppColors1.accentColor,fontSize: 36)
                 ),
-                const Card(
-                  child:Text("···")
-                )
-              ]
+                Text(
+                  tool==0?"Problem":"Calculation",
+                  style:const TextStyle(color:AppColors1.accentColor,fontSize: 36)
+                ),
+                const SizedBox(height:20)
+              ],
+            ),
+            Column(
+                mainAxisAlignment:MainAxisAlignment.center,
+                children:[
+                  Card(
+                    elevation:0,
+                    child:Padding(
+                      padding: const EdgeInsets.symmetric(vertical:4,horizontal:8),
+                      child: Text(contents[0],style:TextStyle(color:AppColors1.primaryColor)),
+                    ),
+                  ),
+                  const Card(
+                    child:Padding(
+                      padding: EdgeInsets.symmetric(vertical:4,horizontal:22),
+                      child: Text("···",style:TextStyle(color:AppColors1.primaryColor)),
+                    )
+                  )
+                ]
+
             )
-          )
-        ]
-      )
+          ]
+        )
+
     );
   }
 
-  Widget tools2(String content,List<String> contents){
+  Widget tools2(List<String> contents){
     return Card(
+        elevation:10,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         color:AppColors1.primaryColor,
         child:Column(
+            mainAxisAlignment:MainAxisAlignment.spaceEvenly,
             children:[
-              Text(content),
               Row(
+                  mainAxisAlignment:MainAxisAlignment.center,
                       children:[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                tool==0?"Geodetic":"Projection",
+                                style:const TextStyle(color:AppColors1.accentColor,fontSize: 32)
+                            ),
+                            Text(
+                                tool==0?"Problem":"Calculation",
+                                style:const TextStyle(color:AppColors1.accentColor,fontSize: 32)
+                            ),
+                            SizedBox(height:10)
+                          ],
+                        ),
+                        SizedBox(width:30),
                         Card(
-                          child:Text(content[0]),
+                          elevation:0,
+                          child:Padding(
+                            padding: const EdgeInsets.symmetric(vertical:4,horizontal:8),
+                            child: Text(contents[0],style:const TextStyle(color:AppColors1.primaryColor)),
+                          ),
                         ),
                         const Card(
-                            child:Text("···")
+                            child:Padding(
+                              padding: EdgeInsets.symmetric(vertical:4,horizontal:22),
+                              child: Text("···",style:TextStyle(color:AppColors1.primaryColor)),
+                            )
                         )
                       ]
                   )
@@ -108,16 +200,3 @@ class ToolCard extends StatelessWidget {
   }
 }
 
-class MoreWidget extends StatelessWidget {
-  const MoreWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children:[
-        Icon(Icons.ac_unit,color:AppColors1.primaryColor,size:150),
-        Icon(Icons.access_alarm,color:AppColors1.primaryColor,size:150)
-      ]
-    );
-  }
-}

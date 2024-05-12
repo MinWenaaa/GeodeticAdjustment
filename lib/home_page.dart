@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:geodetic_adjustment/constant.dart';
 import 'package:geodetic_adjustment/widgets.dart';
 import 'package:geodetic_adjustment/geodetic_adjustment.dart';
@@ -10,8 +12,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int detailed = 0;
-  int tools=0;
+  int detailed = 0;   //HomePage状态
+  int tools=0;        //子组件——CalcPage状态
+
+
   @override
   Widget build(BuildContext context) {
     return detailed==0?state1():state2();
@@ -19,81 +23,195 @@ class _HomePageState extends State<HomePage> {
 
   Widget state1(){
     return Row(
-        mainAxisAlignment:MainAxisAlignment.spaceEvenly,
         children:[
-          const SizedBox(
-              width:400,
-              height:500,
-              child: AuthorCard(style: 0)
+          const Expanded(
+              flex:4,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(80,64,48,64),
+                child: AuthorCard(style: 0),
+              )
           ),
-          SizedBox(
-            width:400,
-            height:500,
-            child: GridView.count(
-                crossAxisCount: 2,
+          Expanded(
+            flex:5,
+            child: Column(
+                mainAxisAlignment:MainAxisAlignment.spaceEvenly,
                 children:[
-                  const ToolCard(tool:0,style:0),
-                  const ToolCard(tool:1,style:0),
-                  const Card(
-                      child:Text("Stay tuned for more...")
+                  const Expanded(
+                    child: Row(
+                      children:[
+                        Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(32, 64, 64, 32),
+                              child: ToolCard(tool:0,style:0),
+                            )),
+                        Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(8, 64, 88, 32),
+                              child: ToolCard(tool:1,style:0),
+                            )),
+                      ]
+                    ),
                   ),
-                  TextButton(
-                      style:AppButton.button1,
-                      onPressed: (){setState(() {
-                        detailed=1;});},
-                      child:const Text("更多/反馈/关注mw")
+                  Expanded(
+                    child: Row(
+                      children:[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(32, 40, 64, 64),
+                            child: Card(
+                                elevation:10,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                                  child:const SizedBox(
+                                      height:double.infinity,
+                                      width:double.infinity,
+                                      child: Center(
+                                        child: Text(
+                                                "Stay tuned for more...",
+                                              style:TextStyle(color:AppColors1.primaryColor,fontSize: 32)
+
+                                        ),
+                                      )
+                                  )
+                              ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8, 40, 88, 64),
+                            child: SizedBox(
+                              height:double.infinity,
+                              width:double.infinity,
+                              child: TextButton(
+                                    style:AppButton.button1,
+                                    onPressed: (){setState(() {
+                                      detailed=1;});},
+                                    child:const Text("更多/反馈/关注mw",style:AppText.aStandard)
+                              ),
+                            ),
+                          ),
+                        )
+                      ]
+                    ),
                   )
                 ]
             ),
-          )
+          ),
         ]
     );
   }
-  Widget state2(){
+
+  Widget state2() {
     return Row(
-      mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-      children:[
-      tools==0?Column(
-        children:[
-          const SizedBox(
-            width:400, height:240,
-            child: AuthorCard(style: 1)
-          ),
-          Row(
-            children:[
-              Column(
-                children:[
-                  TextButton(
-                    onPressed: (){setState(() {tools=1;});},
-                    child:const ToolCard(style:1,tool:0),
-                  ),
-                  TextButton(
-                    onPressed: (){setState(() {tools=2;});},
-                    child:const ToolCard(style:1,tool:1),
-                  ),
-                ]
-              ),
-              const Card(
-                child:Text("Stay tuned for more")
+        children: [
+          Expanded(
+              flex:5,
+              child: tools == 0 ? smallHome() : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        TextButton(
+                            style: AppButton.button2,
+                            onPressed: () {setState(() {tools = 0;});},
+                            child: const Icon(Icons.arrow_back)
+                        ),
+                        Text(tools==1?"白塞尔大地解算":"高斯投影计算",style:AppText.standard)
+                      ],
+                    ),
+                    const SizedBox(height:20),
+                    CalcPage(tool: tools),
+                    const SizedBox(height:40),
+                  ]
               )
-            ]
           ),
+          moreWidget(),
         ]
-      ):Row(
-        children:[
-          CalcPage(tool:tools),
-          TextButton(
-            style:AppButton.button1,
-            onPressed: (){setState(() {tools=0;});},
-            child:const Icon(Icons.arrow_back)
-          )
-        ]
-      ),
-      const MoreWidget(),
-      ]
     );
   }
+
+
+  Widget smallHome(){
+    return Column(
+        children:[
+          const Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(72, 64, 72, 64),
+                child: AuthorCard(style: 1),
+              )
+          ),
+          Expanded(
+            child: Row(
+                children:[
+                  Expanded(
+                    flex:7,
+                    child: Column(
+                        children:[
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(60, 0, 72, 64),
+                              child: TextButton(
+                                onPressed: (){setState(() {tools=1;});},
+                                child:const ToolCard(style:1,tool:0),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(60, 0, 72, 64),
+                              child: TextButton(
+                                onPressed: (){setState(() {tools=2;});},
+                                child:const ToolCard(style:1,tool:1),
+                              ),
+                            ),
+                          ),
+                        ]
+                    ),
+                  ),
+                  Expanded(
+                    flex:3,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 72, 64),
+                      child: Card(
+                          elevation:10,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+                          child:const SizedBox(
+                              height:double.infinity,
+                              width:double.infinity,
+                              child:Center(
+                                child: Text(
+                                    "Stay tuned for more...",
+                                    style:TextStyle(color:AppColors1.primaryColor,fontSize: 32)
+                                ),
+                              )
+                          )
+                      ),
+                    ),
+                  )
+                ]
+            ),
+          ),
+        ]
+    );
+  }
+
+  Widget moreWidget() {
+    return const Expanded(
+      flex:3,
+      child: SizedBox(
+        height:double.infinity,
+        width:double.infinity,
+        child: Image(
+            image:AssetImage('asset/2.png'),
+          fit: BoxFit.cover
+        ),
+      ),
+    );
+  }
+
 }
+
+
+
 class CalcPage extends StatefulWidget {
   final int tool;
   const CalcPage({required this.tool,super.key});
@@ -104,67 +222,102 @@ class CalcPage extends StatefulWidget {
 
 class _CalcPageState extends State<CalcPage> {
   late final int tool =widget.tool;
+  final List<String> ellips =["克拉索夫斯基","1975国际","WGS-84","2000中国大地坐标系"];
   int ellip=4;
   int modeCalc=3;
   int modeZone=2;
   List<TextEditingController> bessel=List.generate(7, (index) => TextEditingController());
   List<TextEditingController> guass=List.generate(4, (index) => TextEditingController());
   List<TextEditingController> zone=[TextEditingController(),TextEditingController()];
+
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: [
-          Row(
+    return Expanded(
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ellipSelct(),
-            zoneSelct(),
-            modeCalcSelect()
-          ],
-        ),
-          Row(
-            mainAxisAlignment:MainAxisAlignment.spaceEvenly,
-            children:[
-              Card(
-                color:AppColors1.primaryColor,
-                  child: tool==1?besselfieldInput():guassFieldInput()),
-              Card(
-                color:AppColors1.primaryColor,
-                  child: tool==1?besselFieldOutput():guassFieldOutput())
-            ]
-          ),
-          TextButton(
-            onPressed: calculate,
-            style:AppButton.button1,
-            child:const Text("确定")
-          )
-    ]
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical:32,horizontal:72),
+                child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: AppColors1.accentColor,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ellipSelct(),
+                        tool==1?Container():zoneSelct(),
+                        modeCalcSelect()
+                      ],
+                    )),
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Card(
+                          elevation:0,
+                          color: AppColors1.secondaryColor,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(56, 32, 56, 0),
+                            child: tool == 1
+                                ? besselfieldInput()
+                                : guassFieldInput(),
+                          )),
+                      Card(
+                          elevation:0,
+                          color: AppColors1.secondaryColor,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(56, 32, 56, 0),
+                            child: tool == 1
+                                ? besselFieldOutput()
+                                : guassFieldOutput(),
+                          ))
+                    ]
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical:32,horizontal:72),
+                child: TextButton(
+                    onPressed: calculate,
+                    style: AppButton.button3,
+                    child: const Text("确定")
+                ),
+              ),
+            )
+          ]
+      ),
     );
   }
 
+
   Widget ellipSelct(){
-    return Row(
-      children:[
-        Column(children:
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+      children:
           List.generate(4, (index) =>
-            Checkbox(
-              value: (ellip==index),
-              onChanged:(value){
-                setState(() {
-                  if(value!){ellip=index;}
-                });
-              }
+            Row(
+              children: [
+                Checkbox(
+                  value: (ellip==index),
+                  onChanged:(value){
+                    setState(() {
+                      if(value!){ellip=index;}
+                    });
+                  }
+                ),
+                Text(ellips[index])
+              ],
             )
-          )
-        ),
-        const Column(
-          children:[
-            Text("椭球1"),
-            Text("椭球2"),
-            Text("椭球3"),
-            Text("椭球4")
-          ]
-        )
-      ]
+          ),
     );
   }
 
@@ -172,12 +325,14 @@ class _CalcPageState extends State<CalcPage> {
     return Column(
       children:[
         Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children:[
             Checkbox(
               value: modeZone==0,
               onChanged: (value){setState(() {if(value!){modeZone=0;}});}
             ),
             const Text("3度带"),
+            const SizedBox(width:40),
             Checkbox(
               value: modeZone==1,
               onChanged: (value){setState(() {if(value!){modeZone=1;}});}
@@ -197,6 +352,7 @@ class _CalcPageState extends State<CalcPage> {
 
   Widget modeCalcSelect(){
     return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
       children:[
         Row(
           children:[
@@ -277,14 +433,12 @@ class _CalcPageState extends State<CalcPage> {
         children:[
           Text(name),
           SizedBox(
-            width:180,
+            width:212,
             height:36,
             child: TextField(
               controller: controller,
-              //keyboardType: TextInputType.number,
-              decoration:const InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(16.0, 10.0, 16.0,0),
-              ),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),)
             ),
           )
         ]
@@ -360,5 +514,6 @@ class _CalcPageState extends State<CalcPage> {
       }
     }
   }
+
 }
 
