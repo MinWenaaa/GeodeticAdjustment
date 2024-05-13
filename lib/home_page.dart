@@ -328,14 +328,14 @@ class _CalcPageState extends State<CalcPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children:[
             Checkbox(
-              value: modeZone==0,
-              onChanged: (value){setState(() {if(value!){modeZone=0;}});}
+              value: modeZone==1,
+              onChanged: (value){setState(() {if(value!){modeZone=1;}});}
             ),
             const Text("3度带"),
             const SizedBox(width:40),
             Checkbox(
-              value: modeZone==1,
-              onChanged: (value){setState(() {if(value!){modeZone=1;}});}
+              value: modeZone==0,
+              onChanged: (value){setState(() {if(value!){modeZone=0;}});}
             ),
             const Text("6度带"),
           ]
